@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Box Parfum</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+  <!-- HEADER -->
+<header class="header">
+  <div class="left">
+<button class="menu" onclick="abrirMenu()">☰</button>
+
+    <nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Início</a>
+  <a href="#catalogo">Catálogo</a>
+  <a href="frete.html">Frete e entrega</a>
+  <a href="trocas.html">Trocas</a>
+  <a href="privacidade.html">Privacidade</a>
+  <a href="https://wa.me/5541996844249" target="_blank">Contato</a>
+</nav>
+
+    <div class="delivery-box">
+      <svg class="delivery-icon" viewBox="0 0 24 24">
+        <path d="M3 7h11v10H3z"/>
+        <path d="M14 10h4l3 3v4h-7z"/>
+        <circle cx="7" cy="19" r="1.5"/>
+        <circle cx="18" cy="19" r="1.5"/>
+      </svg>
+
+      <span class="label">Enviar para</span>
+      <span id="delivery-text" class="location">Digite seu CEP</span>
+      <input id="cep" class="cep hidden" placeholder="CEP">
+    </div>
+  </div>
+
+  <div class="logo">
+    <img src="logo-box-parfum.png" alt="Box Parfum">
+  </div>
+
+  <div class="right">
+
+    <a href="https://instagram.com/boxparfumbr" target="_blank" class="icon">
+      <svg viewBox="0 0 24 24" class="icon-svg">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="18" cy="6" r="1"/>
+      </svg>
+    </a>
+  <div class="cart-wrapper">
+
+  <button class="cart-btn">
+
+    <svg viewBox="0 0 24 24" class="icon-svg">
+      <circle cx="9" cy="20" r="1.5"/>
+      <circle cx="17" cy="20" r="1.5"/>
+      <path d="M3 4h2l2.5 10h11l2-7H6"/>
+    </svg>
+
+    <span class="cart-count">0</span>
+
+  </button>
+
+  <div class="cart-dropdown">
+
+    <h3>Meu carrinho</h3>
+
+    <div id="cart-items"></div>
+
+    <strong>
+      Total:
+      <span id="cart-total">R$ 0,00</span>
+    </strong>
+
+    <button onclick="finalizarCompra()">
+      Finalizar Compra
+    </button>
+
+  </div>
+
+</div>
+      </div>
+    </div>
+
+
+</header>
+
+  
+<!-- BANNER -->
+<section class="amazon-carousel">
+
+  <button class="slide-btn prev">‹</button>
+
+  <div class="amazon-track">
+
+    <div class="amazon-slide">
+      <img src="h1.png" alt="Banner Box Parfum" class="banner-img">
+    </div>
+
+    <div class="amazon-slide">
+      <img src="h2.png" alt="Banner Box Parfum" class="banner-img">
+    </div>
+
+    <div class="amazon-slide">
+      <img src="h3.png" alt="Banner Box Parfum" class="banner-img">
+    </div>
+
+  </div>
+
+  <button class="slide-btn next">›</button>
+
+  <div class="dots">
+    <span class="active"></span>
+    <span></span>
+    <span></span>
+  </div>
+
+</section>
+
+<div class="benefit-item">
+    <section class="benefits-img">
+
+
+
+  <img src="beneficios.png" alt="">
+  </div>
+
+</section>
+
+  <!-- CATÁLOGO -->
+<section class="catalog" id="catalogo">
+  <div class="catalog-header">
+    <p class="catalog-kicker">BOX PARFUM</p>
+    <h2>Nosso Catálogo</h2>
+    <p class="catalog-subtitle">Perfumes, body splashs e cuidados selecionados para marcar presença.</p>
+  </div>
+
+  <div class="catalog-tools">
+    <input id="product-search" class="catalog-search" type="text" placeholder="Buscar produto...">
+
+    <select id="category-filter" class="catalog-select">
+      <option value="Todos">Todos</option>
+      <option value="Perfume">Perfumes</option>
+      <option value="Body Splash">Body Splash</option>
+      <option value="Hidratante">Hidratantes</option>
+      <option value="All Over Spray">All Over Spray</option>
+    </select>
+
+    <select id="sort-filter" class="catalog-select">
+      <option value="default">Ordenar</option>
+      <option value="price-asc">Menor preço</option>
+      <option value="price-desc">Maior preço</option>
+      <option value="name-asc">Nome A-Z</option>
+    </select>
+  </div>
+
+  <div class="catalog-count" id="catalog-count"></div>
+  <div class="products" id="products-grid"></div>
+</section>
+
+<style>
+.catalog{
+  padding:55px 20px;
+  background:#0a0a0a;
+}
+
+.catalog-header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.catalog-kicker{
+  color:#d4af7f;
+  letter-spacing:4px;
+  font-size:11px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.catalog h2{
+  color:#d4af7f;
+  font-size:34px;
+  font-family:Georgia,serif;
+  font-weight:400;
+  margin-bottom:8px;
+}
+
+.catalog-subtitle{
+  color:#fff;
+  opacity:.7;
+  font-size:14px;
+}
+
+.catalog-tools{
+  max-width:1050px;
+  margin:0 auto 18px;
+  display:grid;
+  grid-template-columns:1fr 180px 180px;
+  gap:12px;
+}
+
+.catalog-search,
+.catalog-select{
+  background:#111;
+  border:1px solid rgba(212,175,127,.25);
+  color:#fff;
+  padding:12px 14px;
+  border-radius:8px;
+  outline:none;
+}
+
+.catalog-count{
+  max-width:1050px;
+  margin:0 auto 18px;
+  color:#d4af7f;
+  font-size:12px;
+  opacity:.9;
+}
+
+.products{
+  max-width:1050px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+}
+
+.card{
+  background:linear-gradient(180deg,#111,#0d0d0d);
+  border:1px solid rgba(212,175,127,.18);
+  padding:16px;
+  text-align:left;
+  transition:.25s ease;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  border-color:#d4af7f;
+}
+
+.product-img-box{
+  width:100%;
+  aspect-ratio:1/1;
+  background:#151515;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  margin-bottom:14px;
+}
+
+.product-img-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.product-category{
+  color:#d4af7f;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-bottom:6px;
+}
+
+.card h3{
+  color:#fff;
+  font-size:17px;
+  line-height:1.25;
+  margin-bottom:6px;
+  font-family:Georgia,serif;
+  font-weight:400;
+}
+
+.card p{
+  color:#fff;
+  opacity:.65;
+  font-size:12px;
+  min-height:34px;
+}
+
+.price{
+  display:block;
+  color:#d4af7f;
+  font-size:18px;
+  margin:12px 0;
+}
+
+.stock{
+  color:#fff;
+  opacity:.55;
+  font-size:11px;
+  margin-bottom:12px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.add-cart,
+.buy{
+  border:1px solid #d4af7f;
+  background:transparent;
+  color:#d4af7f;
+  padding:10px;
+  cursor:pointer;
+  font-size:12px;
+  transition:.25s ease;
+}
+
+.add-cart:hover,
+.buy:hover{
+  background:#d4af7f;
+  color:#0a0a0a;
+}
+
+@media(max-width:850px){
+  .catalog-tools{grid-template-columns:1fr;}
+  .products{grid-template-columns:1fr 1fr;}
+}
+
+@media(max-width:520px){
+  .products{grid-template-columns:1fr;}
+}
+</style>
+
+<script>
+const productsData = [
+  {name:"Body Splash Lattafa Angham", category:"Body Splash", price:120, stock:1, image:"BodySplashLattafaAngham.png", desc:"Leve, envolvente e perfeito para o dia a dia."},
+  {name:"Body Splash Lattafa Badee Al Noble", category:"Body Splash", price:120, stock:2, image:"body-splash-lattafa-badee-al-noble.png", desc:"Fragrância marcante com toque sofisticado."},
+  {name:"Body Splash Lattafa Eclaire", category:"Body Splash", price:120, stock:2, image:"BodySplashEclaire.png", desc:"Doce, elegante e irresistível."},
+  {name:"Body Splash Lattafa Fakhar Feminino", category:"Body Splash", price:120, stock:2, image:"BodySplashHaya.png", desc:"Feminino, refinado e marcante."},
+  {name:"Body Splash Lattafa Haya", category:"Body Splash", price:120, stock:1, image:"haya.png", desc:"Leveza e sofisticação em uma fragrância delicada."},
+  {name:"Body Splash Lattafa Mayar Cherry Intense", category:"Body Splash", price:120, stock:1, image:"mayarcherry.png", desc:"Frutado intenso com presença envolvente."},
+  {name:"Body Splash Lattafa Mayar Natural Intense", category:"Body Splash", price:120, stock:1, image:"mayarnatural.png", desc:"Marcante, fresco e sofisticado."},
+  {name:"Body Splash Lattafa Sehr", category:"Body Splash", price:120, stock:1, image:"sehr.png", desc:"Aroma elegante para todos os momentos."},
+  {name:"Body Splash Lattafa Yara", category:"Body Splash", price:120, stock:1, image:"mistyara.png", desc:"Doce, feminino e delicado."},
+  {name:"Body Splash Lattafa Yara Tous", category:"Body Splash", price:120, stock:2, image:"yaratous.png", desc:"Tropical, alegre e envolvente."},
+  {name:"Lattafa All Over Yara Tous 150ml", category:"All Over Spray", price:120, stock:1, image:"alloveryaratous.png", desc:"Versátil para perfumar corpo e rotina."},
+  {name:"Victoria's Secret Pure Seduction", category:"Body Splash", price:140, stock:1, image:"victoriasecretspureseductiion.png", desc:"Frutado, feminino e sedutor."},
+  {name:"Victoria's Secret Love Spell", category:"Body Splash", price:140, stock:1, image:"victoriasecretslovespell.png", desc:"Clássico, doce e inesquecível."},
+  {name:"Victoria's Secret Body Lotion", category:"Hidratante", price:140, stock:1, image:"vsbodylotion.png", desc:"Hidratação perfumada com toque luxuoso."},
+  {name:"Victoria's Secret Love Spell Creme Hidratante", category:"Hidratante", price:140, stock:1, image:"victoriasecretscremehidratantels.png", desc:"Pele macia com aroma marcante."},
+  {name:"Armaf Elixir Of The Wild Masculino", category:"Body Splash", price:120, stock:1, image:"elixirofwild.png", desc:"Masculino, intenso e moderno."},
+  {name:"Armaf I Am Velvet Mirage", category:"Body Splash", price:120, stock:2, image:"velvetmirage.png", desc:"Elegante, aveludado e sofisticado."},
+  {name:"Armaf I Am Eba", category:"Body Splash", price:120, stock:2, image:"eba.png", desc:"Compartilhável, moderno e envolvente."},
+  {name:"Armaf I Am Lyna", category:"Body Splash", price:120, stock:2, image:"lyna.png", desc:"Leve, feminina e cheia de personalidade."},
+  {name:"Armaf I Am Enigma", category:"Body Splash", price:120, stock:2, image:"enigma.png", desc:"Misterioso e marcante."},
+  {name:"Armaf I Am Celestial", category:"Body Splash", price:120, stock:2, image:"celestial.png", desc:"Sofisticado e luminoso."},
+  {name:"Armaf I Am Fire", category:"Body Splash", price:120, stock:2, image:"fire.png", desc:"Quente, ousado e marcante."},
+  {name:"Armaf I Am Heavenly", category:"Body Splash", price:120, stock:2, image:"heavenly.png", desc:"Suave, elegante e delicado."},
+  {name:"Armaf I Am Divine", category:"Body Splash", price:120, stock:2, image:"divine.png", desc:"Feminino, refinado e angelical."},
+  {name:"Armaf I Am Selfless", category:"Body Splash", price:120, stock:2, image:"selfless.png", desc:"Leve, clean e envolvente."},
+  {name:"Armaf I Am Magic", category:"Body Splash", price:120, stock:2, image:"magic.png", desc:"Aroma encantador e sofisticado."},
+  {name:"Armaf I Am Frozen", category:"Body Splash", price:120, stock:2, image:"frozen.png", desc:"Refrescante, moderno e marcante."},
+  {name:"Armaf I Am Kaya", category:"Body Splash", price:120, stock:2, image:"kaya.png", desc:"Feminino e envolvente."},
+  {name:"Armaf I Am Legacy", category:"Body Splash", price:120, stock:2, image:"legacy.png", desc:"Presença marcante e elegante."},
+  {name:"Body Splash Musamam Glitter Feminino", category:"Body Splash", price:120, stock:2, image:"bsmusaman.png", desc:"Brilho, feminilidade e sofisticação."},
+  {name:"Body Splash Delilah", category:"Body Splash", price:120, stock:2, image:"dalilah.png", desc:"Delicado, feminino e envolvente."},
+  {name:"Body Splash Angel", category:"Body Splash", price:120, stock:2, image:"angel.png", desc:"Doçura e leveza para a rotina."},
+  {name:"Body Splash Fakhar", category:"Body Splash", price:120, stock:2, image:"fskharbs.png", desc:"Elegância em versão leve e versátil."},
+  {name:"Asad Elixir Lattafa Masculino", category:"Perfume", price:280, stock:2, image:"asaadelixir.png", desc:"Intenso, masculino e poderoso."},
+  {name:"Yara Elixir Lattafa Feminino", category:"Perfume", price:250, stock:2, image:"yaraelixir.png", desc:"Doce, feminino e marcante."},
+  {name:"Urban Man Ultra Masculino", category:"Perfume", price:230, stock:2, image:"urban-man-ultra.png", desc:"Moderno, urbano e elegante."},
+  {name:"Mayar Intense Feminino", category:"Perfume", price:200, stock:2, image:"mayarintense.png", desc:"Frutado, intenso e sofisticado."},
+  {name:"Fakhar Gold Extrait Masculino", category:"Perfume", price:200, stock:1, image:"fakhargold.png", desc:"Elegante, intenso e inesquecível."},
+  {name:"Fakhar Platinum Masculino", category:"Perfume", price:240, stock:1, image:"fakharplatinum.png", desc:"Luxo masculino com presença refinada."},
+  {name:"Asad Bourbon Masculino", category:"Perfume", price:280, stock:1, image:"asaadbourbom.png", desc:"Quente, marcante e sofisticado."},
+  {name:"Qaed Al Fursan Masculino", category:"Perfume", price:170, stock:1, image:"qaed al fursan.png", desc:"Clássico árabe com personalidade."},
+  {name:"Ferrari Black Scuderia Masculino", category:"Perfume", price:200, stock:2, image:"ferrariblack.png", desc:"Esportivo, elegante e marcante."},
+  {name:"Sharaf Blend Zimaya Masculino", category:"Perfume", price:260, stock:1, image:"sharaf.png", desc:"Blend intenso com assinatura sofisticada."},
+  {name:"Khamrah Masculino", category:"Perfume", price:200, stock:1, image:"kramrah.png", desc:"Doce, quente e envolvente."},
+  {name:"Pride Nebras Lattafa Feminino", category:"Perfume", price:260, stock:1, image:"pridenebras.png", desc:"Feminino, cremoso e marcante."},
+  {name:"Eclaire Lattafa Feminino", category:"Perfume", price:240, stock:2, image:"eclaireparfum.png", desc:"Doce gourmand com toque sofisticado."},
+  {name:"Victoria Lattafa Feminino", category:"Perfume", price:220, stock:2, image:"victoria.png", desc:"Elegante, feminino e moderno."},
+  {name:"Yara Rosa Tradicional", category:"Perfume", price:190, stock:2, image:"yara.png", desc:"Doce, delicado e queridinho."},
+  {name:"Musamam Lattafa Feminino", category:"Perfume", price:290, stock:1, image:"musaman.png", desc:"Luxuoso, intenso e sofisticado."},
+  {name:"Sabah Al Ward Sugar Feminino", category:"Perfume", price:180, stock:2, image:"sugar.png", desc:"Doce, floral e irresistível."},
+  {name:"Sabah Al Ward Tradicional Feminino", category:"Perfume", price:160, stock:2, image:"sabahalwerd.png", desc:"Floral, feminino e elegante."},
+  {name:"Rayhaan Corium Masculino", category:"Perfume", price:240, stock:1, image:"rayhaamcorium.png", desc:"Masculino, encorpado e refinado."},
+  {name:"Rayhaan Elixir Masculino", category:"Perfume", price:250, stock:1, image:"rayhaamelixir.png", desc:"Intenso, elegante e moderno."},
+  {name:"Rayhaan Dahliya Feminino", category:"Perfume", price:196, stock:1, image:"rayhaan-dahliya.png", desc:"Floral, feminino e sofisticado."},
+  {name:"Animale For Men", category:"Perfume", price:230, stock:1, image:"animaleformen.png", desc:"Clássico masculino com presença."},
+  {name:"Sakeena Lattafa Feminino", category:"Perfume", price:190, stock:2, image:"sakeena.png", desc:"Feminino, doce e elegante."}
+];
+
+
+function money(value){
+  return value.toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
+}
+
+
+function renderProducts(){
+  const grid = document.getElementById("products-grid");
+  const search = document.getElementById("product-search").value.toLowerCase();
+  const category = document.getElementById("category-filter").value;
+  const sort = document.getElementById("sort-filter").value;
+
+  let list = productsData.filter(product => {
+    const matchSearch = product.name.toLowerCase().includes(search) || product.desc.toLowerCase().includes(search);
+    const matchCategory = category === "Todos" || product.category === category;
+    return matchSearch && matchCategory;
+  });
+  
+
+  if(sort === "price-asc") list.sort((a,b)=>a.price-b.price);
+  if(sort === "price-desc") list.sort((a,b)=>b.price-a.price);
+  if(sort === "name-asc") list.sort((a,b)=>a.name.localeCompare(b.name));
+  document.getElementById("catalog-count").textContent = `${list.length} produto(s) encontrado(s)`;
+
+
+  grid.innerHTML = list.map((product, index)=>`
+    <article class="card">
+      <div class="product-img-box">
+        <img src="${product.image}" alt="${product.name}" onerror="this.src='placeholder-produto.png'">
+      </div>
+      <div class="product-category">${product.category}</div>
+      <h3>${product.name}</h3>
+      <p>${product.desc}</p>
+      <span class="price">${money(product.price)}</span>
+      <div class="stock">Estoque: ${product.stock} unidade(s)</div>
+    
+    
+<div class="actions">
+
+  <div class="product-actions">
+
+    <button onclick="diminuirProduto(${productsData.indexOf(product)})">
+      −
+    </button>
+
+    <span id="qtd-${productsData.indexOf(product)}">
+      0
+    </span>
+
+    <button onclick="aumentarProduto(${productsData.indexOf(product)})">
+      +
+    </button>
+
+  </div>
+
+  <button class="buy"
+    onclick="buyNow(${productsData.indexOf(product)})">
+    Comprar
+  </button>
+
+</div>
+    </article>
+  `).join("");
+  
+  }
+document.getElementById("product-search")
+.addEventListener("input", renderProducts);
+
+document.getElementById("category-filter")
+.addEventListener("change", renderProducts);
+
+document.getElementById("sort-filter")
+.addEventListener("change", renderProducts);
+renderProducts();
+
+  
+
+function buyNow(index){
+
+  const product = productsData[index];
+
+  localStorage.setItem(
+    "checkoutProduct",
+    JSON.stringify({
+      ...product,
+      quantity:1
+    })
+  );
+
+  localStorage.removeItem("checkoutCart");
+
+  window.location.href = "checkout.html";
+}
+
+renderProducts();
+</script>
+
+<script>
+const deliveryBox = document.querySelector(".delivery-box");
+const cepInput = document.getElementById("cep");
+const deliveryText = document.getElementById("delivery-text");
+
+window.addEventListener("load", () => {
+  const cepSalvo = localStorage.getItem("cep");
+  const enderecoSalvo = localStorage.getItem("enderecoCompleto");
+
+  if (cepSalvo) cepInput.value = cepSalvo;
+  if (enderecoSalvo) deliveryText.textContent = enderecoSalvo;
+});
+
+deliveryBox.addEventListener("click", () => {
+  deliveryText.classList.add("hidden");
+  cepInput.classList.remove("hidden");
+
+  setTimeout(() => {
+    cepInput.focus();
+    cepInput.select();
+  }, 50);
+});
+
+cepInput.addEventListener("click", (e) => {
+  e.stopPropagation();
+});
+
+cepInput.addEventListener("blur", buscarCEP);
+
+async function buscarCEP(){
+  const cep = cepInput.value.replace(/\D/g, "");
+
+  if (cep.length !== 8) {
+    cepInput.classList.add("hidden");
+    deliveryText.classList.remove("hidden");
+    return;
+  }
+
+  const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+  const data = await res.json();
+
+  if (data.erro) {
+    deliveryText.textContent = "CEP inválido";
+    cepInput.classList.add("hidden");
+    deliveryText.classList.remove("hidden");
+    return;
+  }
+
+  const enderecoCompleto = `${data.localidade} - ${data.uf}`;
+
+  deliveryText.textContent = enderecoCompleto;
+
+  localStorage.setItem("cep", cep);
+  localStorage.setItem("cidade", data.localidade);
+  localStorage.setItem("estado", data.uf);
+  localStorage.setItem("endereco", data.logradouro || "");
+  localStorage.setItem("enderecoCompleto", enderecoCompleto);
+
+  cepInput.classList.add("hidden");
+  deliveryText.classList.remove("hidden");
+}
+</script>
+
+<div id="cart-modal" class="cart-modal">
+  <div class="cart-box">
+    <button onclick="fecharCarrinho()">X</button>
+    <h2>Carrinho</h2>
+  </div>
+</div>
+
+<script>
+  let cart =
+JSON.parse(localStorage.getItem("cart")) || [];
+
+function money(value){
+  return value.toLocaleString("pt-BR",{
+    style:"currency",
+    currency:"BRL"
+  });
+}
+
+function atualizarCarrinho(){
+
+  const cartItems =
+    document.getElementById("cart-items");
+
+  const cartTotal =
+    document.getElementById("cart-total");
+
+  const cartCount =
+    document.querySelector(".cart-count");
+
+  cartItems.innerHTML = "";
+
+  let total = 0;
+
+  let quantidadeTotal = 0;
+
+  cart.forEach((item,index)=>{
+
+    if(!item.quantity){
+      item.quantity = 1;
+    }
+
+    total += Number(item.price)
+      * Number(item.quantity);
+
+    quantidadeTotal +=
+      Number(item.quantity);
+
+    cartItems.innerHTML += `
+
+      <div class="cart-item">
+
+        <img
+          src="${item.image}"
+          alt="${item.name}"
+          class="cart-item-img"
+        >
+
+        <div class="cart-item-info">
+
+          <h4>${item.name}</h4>
+
+          <p>${money(item.price)}</p>
+
+          <div class="cart-quantity">
+
+            <button onclick="diminuirQtd(${index})">
+              −
+            </button>
+
+            <span>${item.quantity}</span>
+
+            <button onclick="aumentarQtd(${index})">
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+        <button
+          class="remove-item"
+          onclick="removerItem(${index})"
+        >
+          ✕
+        </button>
+
+      </div>
+
+    `;
+  });
+
+  cartCount.innerText =
+    quantidadeTotal;
+
+  cartTotal.innerText =
+    money(total);
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+}
+function addToCart(index){
+
+  const product =
+    productsData[index];
+
+  const existing =
+    cart.find(item =>
+      item.name === product.name
+    );
+
+  if(existing){
+
+    existing.quantity++;
+
+  }else{
+
+    cart.push({
+      ...product,
+      quantity:1
+    });
+  }
+
+  atualizarCarrinho();
+}
+
+function aumentarProduto(index){
+
+  addToCart(index);
+
+  atualizarQtdProduto(index);
+}
+
+function diminuirProduto(index){
+
+  const product = productsData[index];
+
+  const item =
+    cart.find(i =>
+      i.name === product.name
+    );
+
+  if(!item) return;
+
+  if(item.quantity > 1){
+
+    item.quantity--;
+
+  }else{
+
+    cart =
+      cart.filter(i =>
+        i.name !== product.name
+      );
+  }
+
+  atualizarCarrinho();
+
+  atualizarQtdProduto(index);
+}
+function aumentarQtd(index){
+
+  cart[index].quantity++;
+
+  atualizarCarrinho();
+}
+
+function diminuirQtd(index){
+
+  if(cart[index].quantity > 1){
+
+    cart[index].quantity--;
+
+  }else{
+
+    cart.splice(index,1);
+  }
+
+  atualizarCarrinho();
+}
+
+function removerItem(index){
+
+  cart.splice(index,1);
+
+  atualizarCarrinho();
+}
+
+function atualizarQtdProduto(index){
+
+  const product =
+    productsData[index];
+
+  const item =
+    cart.find(i =>
+      i.name === product.name
+    );
+
+  const qtdElemento =
+    document.getElementById(`qtd-${index}`);
+
+  if(qtdElemento){
+
+    qtdElemento.innerText =
+      item ? item.quantity : 0;
+  }
+}
+atualizarCarrinho();
+
+productsData.forEach((product,index)=>{
+
+  atualizarQtdProduto(index);
+
+});
+
+atualizarCarrinho();
+</script>
+
+
+<div class="elisa-toggle" onclick="abrirElisa()">
+  💬
+</div>
+
+<div class="elisa-chat" id="elisaChat">
+
+  <div class="elisa-header">
+
+    <div class="elisa-info">
+      <div class="elisa-avatar">E</div>
+
+      <div>
+        <h3>Elisa • Box Parfum</h3>
+        <p>Assistente virtual</p>
+      </div>
+    </div>
+
+    <div class="elisa-actions">
+      <button onclick="minimizarElisa()">—</button>
+      <button onclick="fecharElisa()">✕</button>
+    </div>
+
+  </div>
+
+  <div class="elisa-body" id="elisaBody">
+
+    <div class="elisa-message">
+      Olá 💛 Sou a Elisa, assistente virtual da Box Parfum.
+      Como posso ajudar?
+    </div>
+
+    <button onclick="abrirWhats('duvidas')">
+      ❓ Dúvidas
+    </button>
+
+    <button onclick="abrirWhats('cancelamentos')">
+      📦 Cancelamentos
+    </button>
+
+    <button onclick="abrirWhats('devolucoes')">
+      🔄 Devoluções
+    </button>
+
+    <button onclick="abrirWhats('reclamacoes')">
+      ⚠️ Reclamações
+    </button>
+
+    <button onclick="abrirWhats('sugestoes')">
+      💡 Sugestões
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+const elisaChat =
+  document.getElementById("elisaChat");
+
+const elisaBody =
+  document.getElementById("elisaBody");
+
+function abrirElisa(){
+
+  elisaChat.style.display = "block";
+}
+
+function fecharElisa(){
+
+  elisaChat.style.display = "none";
+}
+
+function minimizarElisa(){
+
+  if(elisaBody.style.display === "none"){
+
+    elisaBody.style.display = "block";
+
+  }else{
+
+    elisaBody.style.display = "none";
+  }
+}
+
+function abrirWhats(tipo){
+
+  const numero = "5541996844249";
+
+  const mensagens = {
+
+    duvidas:
+      "Olá Elisa! Tenho dúvidas sobre produtos da Box Parfum.",
+
+    cancelamentos:
+      "Olá Elisa! Preciso de ajuda com cancelamento.",
+
+    devolucoes:
+      "Olá Elisa! Preciso solicitar devolução.",
+
+    reclamacoes:
+      "Olá Elisa! Quero registrar uma reclamação.",
+
+    sugestoes:
+      "Olá Elisa! Tenho uma sugestão para a Box Parfum."
+  };
+
+  const texto =
+    encodeURIComponent(mensagens[tipo]);
+
+  window.open(
+    `https://wa.me/${numero}?text=${texto}`,
+    "_blank"
+  );
+}
+
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let slideAtualBox = 0;
+
+  const slidesBox = document.querySelectorAll(".amazon-slide");
+  const dotsBox = document.querySelectorAll(".dots span");
+  const btnNextBox = document.querySelector(".next");
+  const btnPrevBox = document.querySelector(".prev");
+
+  if (slidesBox.length === 0) {
+    console.log("Nenhum slide encontrado");
+    return;
+  }
+
+  function mostrarSlideBox(index) {
+    slidesBox.forEach((slide, i) => {
+      slide.style.display = i === index ? "block" : "none";
+    });
+
+    dotsBox.forEach(dot => dot.classList.remove("active"));
+
+    if (dotsBox[index]) {
+      dotsBox[index].classList.add("active");
+    }
+  }
+
+  function proximoSlideBox() {
+    slideAtualBox++;
+
+    if (slideAtualBox >= slidesBox.length) {
+      slideAtualBox = 0;
+    }
+
+    mostrarSlideBox(slideAtualBox);
+  }
+
+  function slideAnteriorBox() {
+    slideAtualBox--;
+
+    if (slideAtualBox < 0) {
+      slideAtualBox = slidesBox.length - 1;
+    }
+
+    mostrarSlideBox(slideAtualBox);
+  }
+
+  if (btnNextBox) {
+    btnNextBox.addEventListener("click", proximoSlideBox);
+  }
+
+  if (btnPrevBox) {
+    btnPrevBox.addEventListener("click", slideAnteriorBox);
+  }
+
+  mostrarSlideBox(slideAtualBox);
+
+  setInterval(proximoSlideBox, 3000);
+});
+</script>
+
+<footer class="footer-box">
+
+  <div class="footer-container">
+
+    <div class="footer-brand">
+      <img src="logo-box-parfum.png" alt="Box Parfum">
+
+      <p>
+        Fragrâncias árabes premium selecionadas
+        para marcar presença e despertar emoções.
+      </p>
+    </div>
+
+    <div class="footer-links">
+
+  <h3>Navegação</h3>
+
+  <a href="index.html">Início</a>
+  <a href="index.html#catalogo">Catálogo</a>
+  <a href="index.html#catalogo">Mais vendidos</a>
+  <a href="https://wa.me/5541996844249?text=Ol%C3%A1%2C%20quero%20falar%20com%20a%20Box%20Parfum." target="_blank">Contato</a>
+
+</div>
+
+<div class="footer-links">
+
+  <h3>Atendimento</h3>
+
+  <a href="frete.html">Frete e entrega</a>
+  <a href="trocas.html">Trocas</a>
+  <a href="privacidade.html">Privacidade</a>
+  <a href="https://wa.me/5541996844249?text=Ol%C3%A1%2C%20preciso%20de%20suporte%20da%20Box%20Parfum." target="_blank">Suporte</a>
+
+</div>
+
+  <div class="footer-social">
+
+  <h3>Redes sociais</h3>
+
+  <div class="social-icons">
+
+    <a href="https://instagram.com/boxparfumbr" target="_blank" aria-label="Instagram">
+      <svg viewBox="0 0 24 24">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="18" cy="6" r="1.2"></circle>
+      </svg>
+    </a>
+
+    <a href="https://wa.me/5541996844249?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Box%20Parfum." target="_blank" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24">
+        <path d="M20.5 11.8a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.4-5a8.4 8.4 0 1 1 16.1-3.7z"></path>
+        <path d="M8.5 8.6c.2-.5.4-.5.7-.5h.5c.2 0 .4.1.5.4l.7 1.6c.1.3.1.5-.1.7l-.4.5c-.1.1-.2.3-.1.5.3.6.8 1.2 1.3 1.6.6.5 1.2.8 1.8 1 .2.1.4 0 .5-.1l.6-.7c.2-.2.4-.3.7-.2l1.7.8c.3.1.4.3.4.6 0 .4-.2 1.2-.8 1.6-.5.4-1.2.5-2 .3-1.6-.4-3.2-1.4-4.5-2.7-1.3-1.3-2.3-2.9-2.7-4.5-.2-.8-.1-1.5.2-2z"></path>
+      </svg>
+    </a>
+
+  </div>
+
+</div>
+
+</div>
+
+  <div class="footer-bottom">
+    © 2026 BOX PARFUM — Todos os direitos reservados.
+  </div>
+
+</footer>
+
+<div class="cookie-banner" id="cookieBanner">
+
+  <div>
+    <strong>Usamos cookies</strong>
+    <p>
+      Utilizamos cookies para melhorar sua experiência,
+      personalizar conteúdo e analisar o uso do site.
+    </p>
+  </div>
+
+  <button onclick="aceitarCookies()">
+    Aceitar
+  </button>
+
+</div>
+
+<script>
+function aceitarCookies(){
+
+  localStorage.setItem("cookiesAceitos", "sim");
+
+  document.getElementById("cookieBanner").style.display = "none";
+}
+
+window.addEventListener("load", () => {
+
+  if(localStorage.getItem("cookiesAceitos") === "sim"){
+
+    document.getElementById("cookieBanner").style.display = "none";
+  }
+
+});
+
+function finalizarCompra(){
+
+  const carrinhoSalvo = JSON.parse(localStorage.getItem("cart")) || cart || [];
+
+  if(carrinhoSalvo.length === 0){
+    alert("Seu carrinho está vazio.");
+    return;
+  }
+
+  localStorage.setItem("checkoutCart", JSON.stringify(carrinhoSalvo));
+  localStorage.removeItem("checkoutProduct");
+  window.location.href = "checkout.html";
+}
+
+
+</script>
+
+<script>
+function abrirMenu(){
+  document.getElementById("mobileMenu").classList.toggle("active");
+}
+</script>
+</body>
+</html>

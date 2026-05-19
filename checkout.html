@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Box Parfum</title>
+  <link rel="stylesheet" href="checkout.css">
+</head>
+<body>
+<header class="checkout-header">
+
+  <img src="logo-box-parfum.png" alt="Box Parfum" class="checkout-logo">
+
+  <nav class="checkout-menu">
+    <a href="index.html">INÍCIO</a>
+    <a href="index.html#catalogo">CATÁLOGO</a>
+    <a href="https://instagram.com/boxparfumbr" target="_blank">INSTAGRAM</a>
+  </nav>
+</header>
+<section class="checkout">
+  <h1>Finalizar Compra</h1>
+<div class="checkout-grid">
+
+  <div class="form-box">
+
+    <h2>Dados do cliente</h2>
+
+    <input id="nome" placeholder="Nome completo *">
+    <input id="cidade" placeholder="Cidade *">
+    <input id="estado" placeholder="Estado *">
+    <input id="celular" placeholder="Celular *">
+    <input id="cep" placeholder="CEP *">
+    <input id="endereco" placeholder="Endereço *">
+    <input id="numero" placeholder="Número *">
+    <input id="complemento" placeholder="Complemento">
+
+    <h2>Forma de pagamento</h2>
+
+    <select id="pagamento">
+      <option value="">Selecione</option>
+      <option value="Pix">Pix</option>
+      <option value="Crédito">Crédito</option>
+      <option value="Débito">Débito</option>
+    </select>
+  </div>
+  <div class="checkout-resumo">
+    
+  <h2>Resumo do pedido</h2>
+
+  <div id="checkout-items"></div>
+
+<h2>
+  Total:
+  <span id="checkout-total"></span>
+</h2>
+
+    <div class="linha"></div>
+
+    <div class="resumo-linha">
+      <span>Subtotal</span>
+      <span id="subtotal"></span>
+    </div>
+
+    <div class="resumo-linha">
+      <span>Frete</span>
+      <span id="frete"></span>
+    </div>
+
+    <div class="resumo-linha">
+      <span>Prazo</span>
+      <span id="prazo"></span>
+    </div>
+
+    <div class="linha"></div>
+
+    <div class="resumo-total">
+      <span>Total</span>
+      <span id="total"></span>
+      <button id="finalizar-compra" type="button">Finalizar compra</button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const whatsappVendedor = "5541996844249";
+
+const checkoutProduct = JSON.parse(localStorage.getItem("checkoutProduct"));
+const checkoutCart = JSON.parse(localStorage.getItem("checkoutCart")) || [];
+
+const itensCheckout = checkoutCart.length > 0 
+  ? checkoutCart 
+  : checkoutProduct 
+    ? [checkoutProduct] 
+    : [];
+
+function formatBRL(valor){
+  return Number(valor).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+}
+
+function pegarValor(id){
+  return document.getElementById(id)?.value.trim() || "";
+}
+
+function calcularFrete(cidade, estado){
+  cidade = (cidade || "").toLowerCase();
+  estado = (estado || "").toUpperCase();
+
+  if(cidade.includes("curitiba")){
+    return { valor: 8, prazo: "1 a 2 dias úteis" };
+  }
+
+  if(estado === "PR"){
+    return { valor: 15, prazo: "2 a 4 dias úteis" };
+  }
+
+  if(["SC", "RS"].includes(estado)){
+    return { valor: 22, prazo: "4 a 7 dias úteis" };
+  }
+
+  return { valor: 35, prazo: "5 a 10 dias úteis" };
+}
+
+function renderizarItensCheckout(){
+  const checkoutItems = document.getElementById("checkout-items");
+
+  checkoutItems.innerHTML = "";
+
+  if(itensCheckout.length === 0){
+    checkoutItems.innerHTML = "<p>Nenhum produto encontrado no checkout.</p>";
+    return;
+  }
+
+  itensCheckout.forEach(item => {
+    checkoutItems.innerHTML += `
+      <div class="checkout-item">
+      <img src="${item.image || item.img || item.imagem || ""}" alt="${item.name || item.nome}">
+        <div>
+          
+          <h3>${item.name || item.nome}</h3>
+          <p>Quantidade: ${item.quantity || item.qty || item.quantidade || 1}</p>
+          <strong>${formatBRL(item.price)}</strong>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function calcularSubtotal(){
+  let subtotal = 0;
+
+  itensCheckout.forEach(item => {
+    subtotal += Number(item.price || item.preco || item.valor || 0) * Number(item.quantity || item.qty || item.quantidade || 1);
+  });
+
+  return subtotal;
+}
+
+function atualizarResumoCheckout(){
+  const cidade = pegarValor("cidade");
+  const estado = pegarValor("estado");
+
+  const subtotal = calcularSubtotal();
+  const freteInfo = calcularFrete(cidade, estado);
+  const total = subtotal + freteInfo.valor;
+
+  document.getElementById("subtotal").innerText = formatBRL(subtotal);
+  document.getElementById("frete").innerText = formatBRL(freteInfo.valor);
+  document.getElementById("prazo").innerText = freteInfo.prazo;
+  document.getElementById("total").innerText = formatBRL(total);
+  document.getElementById("checkout-total").innerText = formatBRL(total);
+}
+
+function finalizarCompra(){
+  const nome = pegarValor("nome");
+  const cidade = pegarValor("cidade");
+  const estado = pegarValor("estado");
+  const celular = pegarValor("celular");
+  const cep = pegarValor("cep");
+  const endereco = pegarValor("endereco");
+  const numero = pegarValor("numero");
+  const complemento = pegarValor("complemento");
+  const pagamento = pegarValor("pagamento");
+
+  if(!nome || !cidade || !estado || !celular || !cep || !endereco || !numero || !pagamento){
+    alert("Preencha todos os campos obrigatórios antes de finalizar.");
+    return;
+  }
+
+  if(itensCheckout.length === 0){
+    alert("Nenhum produto encontrado no checkout.");
+    return;
+  }
+
+  const subtotal = document.getElementById("subtotal").innerText;
+  const frete = document.getElementById("frete").innerText;
+  const prazo = document.getElementById("prazo").innerText;
+  const total = document.getElementById("total").innerText;
+
+  let produtosTexto = "";
+
+  itensCheckout.forEach(item => {
+    produtosTexto += `Produto: ${item.name}%0A`;
+    produtosTexto += `Quantidade: ${item.quantity || item.qty || 1}%0A`;
+    produtosTexto += `Valor: ${formatBRL(item.price)}%0A%0A`;
+  });
+
+  let mensagem = `🛍️ *Novo pedido - Box Parfum*%0A%0A`;
+
+  mensagem += `👤 *Dados do cliente*%0A`;
+  mensagem += `Nome: ${nome}%0A`;
+  mensagem += `Celular: ${celular}%0A`;
+  mensagem += `Cidade: ${cidade}%0A`;
+  mensagem += `Estado: ${estado}%0A`;
+  mensagem += `CEP: ${cep}%0A`;
+  mensagem += `Endereço: ${endereco}, Nº ${numero}%0A`;
+  mensagem += `Complemento: ${complemento || "Não informado"}%0A%0A`;
+
+  mensagem += `🧾 *Resumo da compra*%0A`;
+  mensagem += produtosTexto;
+  mensagem += `Subtotal: ${subtotal}%0A`;
+  mensagem += `Frete: ${frete}%0A`;
+  mensagem += `Prazo: ${prazo}%0A`;
+  mensagem += `Total: ${total}%0A%0A`;
+
+  mensagem += `💳 *Forma de pagamento:* ${pagamento}%0A`;
+
+  if(pagamento === "Pix"){
+    mensagem += `Cliente deseja receber o QR Code Pix para finalizar o pagamento.`;
+  }else{
+    mensagem += `Cliente deseja finalizar o pagamento via ${pagamento}.`;
+  }
+
+  window.open(`https://wa.me/${whatsappVendedor}?text=${mensagem}`, "_blank");
+}
+
+document.getElementById("cidade").addEventListener("input", atualizarResumoCheckout);
+document.getElementById("estado").addEventListener("input", atualizarResumoCheckout);
+document.getElementById("finalizar-compra").addEventListener("click", finalizarCompra);
+
+renderizarItensCheckout();
+atualizarResumoCheckout();
+</script>
+
+
+</body>
+</html>

@@ -592,11 +592,25 @@ a{
 }
 
 .card{
-  background:linear-gradient(180deg,#111,#0d0d0d);
-  border:1px solid rgba(212,175,127,.18);
-  padding:16px;
-  text-align:left;
-  transition:.25s ease;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+.card h3{
+  min-height:72px;
+}
+
+.card p{
+  min-height:48px;
+}
+
+.stock{
+  min-height:24px;
+}
+
+.actions{
+  margin-top:auto;
 }
 
 .card:hover{
@@ -630,42 +644,12 @@ a{
   margin-bottom:6px;
 }
 
-.card h3{
-  color:#fff;
-  font-size:17px;
-  line-height:1.25;
-  margin-bottom:6px;
-  font-family:Georgia,serif;
-  font-weight:400;
-}
-
-.card p{
-  color:#fff;
-  opacity:.65;
-  font-size:12px;
-  min-height:34px;
-}
 
 .price{
   display:block;
   color:#d4af7f;
   font-size:18px;
   margin:12px 0;
-}
-
-.stock{
-  color:#fff;
-  opacity:.55;
-  font-size:11px;
-  margin-bottom:12px;
-}
-
-.actions{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-top:18px;
 }
 
 .product-actions{
@@ -1281,12 +1265,32 @@ a{
   justify-content:space-between;
 }
 
+.card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  height:100%;
+  overflow:hidden;
+}
+
 .card h3{
-  min-height:42px;
+  min-height:78px;
+  font-size:13px;
+  line-height:1.3;
 }
 
 .card p{
-  min-height:34px;
+  min-height:60px;
+  font-size:11px;
+  line-height:1.4;
+}
+
+.stock{
+  min-height:22px;
+}
+
+.actions{
+  margin-top:auto;
 }
 
 
@@ -1299,15 +1303,6 @@ a{
 } 
 .product-img-box{
   height:150px;
-}
-
-.card h3{
-  font-size:13px;
-  line-height:1.3;
-}
-
-.card p{
-  font-size:11px;
 }
 
 .price{

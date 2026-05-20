@@ -1298,29 +1298,28 @@ a{
 }
 
 .actions{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
   width:100%;
 }
 
 .product-actions{
-  display:grid;
-  grid-template-columns:42px 1fr 42px;
+  display:flex;
   align-items:center;
-  gap:8px;
-  width:100%;
+  justify-content:space-between;
+  gap:6px;
 }
 
-.product-actions button{
-  width:42px;
-  height:42px;
+.qty-btn{
+  width:36px;
+  height:36px;
+  min-width:36px;
+  padding:0;
 }
 
 .buy{
-  width:100%;
-  max-width:100%;
-  display:block;
+  flex:1;
+  width:auto;
+  padding:10px 6px;
+  font-size:12px;
 }
 
   .elisa-toggle{
